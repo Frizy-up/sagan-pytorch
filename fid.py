@@ -13,9 +13,12 @@ from torchvision import datasets, transforms, utils
 from torchvision.datasets.folder import find_classes
 from torchvision.models import inception_v3, Inception3
 
+# Frizy add for debug
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 parser = argparse.ArgumentParser(description='FID score calculator')
 parser.add_argument('--img', required=True, help='path to image directory')
-parser.add_argument('--batch', default=64, type=int, help='batch size')
+parser.add_argument('--batch', default=4, type=int, help='batch size') #64
 parser.add_argument('--sample', default=5000, type=int,
                     help='number of samples generated for evaluation')
 parser.add_argument('--code', default=128, type=int,
@@ -111,7 +114,15 @@ if __name__ == '__main__':
         from model_resnet import Generator
 
     generator = Generator(args.code, total_class).to(device)
+    # generator.load_state_dict(torch.load(args.checkpoint))
+    # Frizy changed for pytorch0.4.1
+    params = torch.load(args.checkpoint)
+    for k, v in params.items():
+        print("#########################")
+        print("k,v: ", k, v)
+        print("#########################")
     generator.load_state_dict(torch.load(args.checkpoint))
+
     generator.eval()
 
     fids = []

@@ -12,12 +12,15 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, utils
 
+# Frizy add for debug
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+
 parser = argparse.ArgumentParser(description='Self-Attention GAN trainer')
-parser.add_argument('--batch', default=64, type=int, help='batch size')
+parser.add_argument('--batch', default=4, type=int, help='batch size') #64
 parser.add_argument('--iter', default=200000, type=int, help='maximum iterations')
 parser.add_argument(
     '--code', default=128, type=int, help='size of code to input generator'
-)
+)  # 128
 parser.add_argument(
     '--lr_g', default=1e-4, type=float, help='learning rate of generator'
 )
@@ -41,7 +44,7 @@ transform = transforms.Compose(
     [
         transforms.Resize(128),
         transforms.CenterCrop(128),
-        transforms.RandomHorizontalFlip(),
+        # transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ]
